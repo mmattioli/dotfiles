@@ -1,17 +1,19 @@
 " enable syntax highlighting
 syntax on
 
-" use the dark background for color scheme
-set background=dark
+" show line numbers
+set number
 
-" set the color scheme
+" set the color scheme and background
+set background=dark
 colorscheme base16-solarized
 
-" use 4 space characters for spacing
-set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+" each tab should 4 columns wide using spaces
+set tabstop=4
+set shiftwidth=4
+set expandtab
 
-" set word wrapping
+" use soft wrapping at 80 columns
+set linebreak
 set wrap
-
-" maximum line width
 set textwidth=80
