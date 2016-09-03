@@ -1,3 +1,17 @@
+# ensure vim base16-solarized-dark color scheme is installed
+vim_color_name="base16-solarized-dark.vim"
+vim_color_url="https://raw.githubusercontent.com/chriskempson/base16-vim/master/colors/base16-solarized-dark.vim"
+if ! [ -e ~/.vim/colors/$vim_color_name ]; then
+    echo "Installing Solarized color scheme..."
+    if ! [ -d ~/.vim/colors ]; then
+        echo "Creating Vim colors directory..."
+        mkdir -p ~/.vim/colors
+    fi
+    curl -o ~/.vim/colors/$vim_color_name $vim_color_url
+fi
+unset vim_color_name
+unset vim_color_url
+
 # determine whether or not the current git branch is dirty or clean
 function parse_git_dirty {
     [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working directory clean" ]] && echo "*"
@@ -18,7 +32,13 @@ export EDITOR="vim"
 export GOPATH=~/Git/Go
 
 # modify default ls behavior
-alias ls="ls -CFG"
+platform=$(uname)
+if [[ "$platform" == 'Linux' ]]; then
+    alias ls="ls -lF --color=auto"
+elif [[ "$platform" == 'Darwin' ]]; then
+    alias ls="ls -lFG"
+fi
+unset platform
 
 # extract most known archives with one command
 extract () {
@@ -34,7 +54,6 @@ extract () {
             *.tgz)      tar xzf $1      ;;
             *.zip)      unzip $1        ;;
             *.Z)        uncompress $1   ;;
-            *.7z)       7z x $1         ;;
             *)  echo "'$1' cannot be extracted via extract()" ;;
         esac
     else
