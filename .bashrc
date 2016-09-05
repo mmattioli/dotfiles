@@ -1,31 +1,118 @@
-# ensure vim base16-solarized-dark color scheme is installed
-vim_color_name="base16-solarized-dark.vim"
-vim_color_url="https://raw.githubusercontent.com/chriskempson/base16-vim/master/colors/base16-solarized-dark.vim"
-if ! [ -e ~/.vim/colors/$vim_color_name ]; then
-    echo "Installing Solarized color scheme..."
-    if ! [ -d ~/.vim/colors ]; then
-        echo "Creating Vim colors directory..."
-        mkdir -p ~/.vim/colors
-    fi
-    curl -o ~/.vim/colors/$vim_color_name $vim_color_url
-fi
-unset vim_color_name
-unset vim_color_url
+# setup git prompt support
+prompt_git() {
+    local s='';
+    local branchName='';
 
-# determine whether or not the current git branch is dirty or clean
-function parse_git_dirty {
-    [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working directory clean" ]] && echo "*"
+    # check if the current directory is in a git repository
+    if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
+
+        # check if the current directory is in .git before running git checks
+        if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+
+            # ensure index is up to date
+            git update-index --really-refresh -q &>/dev/null;
+
+            # check index for uncommitted changes
+            if ! $(git diff --quiet --ignore-submodules --cached); then
+                s+='+';
+            fi;
+
+            # check for unstaged changes
+            if ! $(git diff-files --quiet --ignore-submodules --); then
+                s+='!';
+            fi;
+
+            # check for untracked files
+            if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+                s+='?';
+            fi;
+
+            # check for stashed files
+            if $(git rev-parse --verify refs/stash &>/dev/null); then
+                s+='$';
+            fi;
+
+        fi;
+
+        # use short symbolic ref as as branch name, if HEAD isn't a symbolic ref,
+        # use shortened SHA for latest commit, otherwise give up
+        branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+            git rev-parse --short HEAD 2> /dev/null || \
+            echo '(unknown)')";
+
+        [ -n "${s}" ] && s=" [${s}]";
+
+        echo -e "${1}${branchName}${2}${s}";
+    else
+        return;
+    fi;
 }
 
-# get the current checked out git branch
-function parse_git_branch {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
-}
+# display 256 colors
+if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
+    export TERM='gnome-256color';
+elif infocmp xterm-256color >/dev/null 2>&1; then
+    export TERM='xterm-256color';
+fi;
 
-# set prompt
-export PS1='\u@\h \[\033[1;33m\]\w\[\033[0m\]$(parse_git_branch)$ '
+# set colors
+if tput setaf 1 &> /dev/null; then
+    tput sgr0; # reset
+    bold=$(tput bold);
+    reset=$(tput sgr0);
+    black=$(tput setaf 0);
+    blue=$(tput setaf 33);
+    cyan=$(tput setaf 37);
+    green=$(tput setaf 64);
+    orange=$(tput setaf 166);
+    purple=$(tput setaf 125);
+    red=$(tput setaf 124);
+    violet=$(tput setaf 61);
+    white=$(tput setaf 15);
+    yellow=$(tput setaf 136);
+else
+    bold='';
+    reset="\e[0m";
+    black="\e[1;30m";
+    blue="\e[1;34m";
+    cyan="\e[1;36m";
+    green="\e[1;32m";
+    orange="\e[1;33m";
+    purple="\e[1;35m";
+    red="\e[1;31m";
+    violet="\e[1;35m";
+    white="\e[1;37m";
+    yellow="\e[1;33m";
+fi;
 
-# set vim as the default editor
+# highlight user when logged in as root
+if [[ "${USER}" == "root" ]]; then
+    userStyle="${red}";
+else
+    userStyle="${orange}";
+fi;
+
+# hightlight host when connected via SSH
+if [[ "${SSH_TTY}" ]]; then
+    hostStyle="${bold}${red}";
+else
+    hostStyle="${yellow}";
+fi;
+
+# set title and prompt
+PS1="\[\033]0;\W\007\]"; # working directory base name
+PS1+="\[${bold}\]\n"; # line break
+PS1+="\[${userStyle}\]\u"; # user
+PS1+="\[${white}\] at ";
+PS1+="\[${hostStyle}\]\h"; # host
+PS1+="\[${white}\] in ";
+PS1+="\[${green}\]\w"; # working directory full path
+PS1+="\$(prompt_git \"\[${white}\] on \[${violet}\]\" \"\[${blue}\]\")"; # git details
+PS1+="\n";
+PS1+="\[${white}\]\$ \[${reset}\]"; # '$' (and reset color)
+export PS1;
+
+# set Vim as the default editor
 export EDITOR="vim"
 
 # set Go workspace
