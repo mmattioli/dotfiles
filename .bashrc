@@ -1,41 +1,41 @@
-# setup git prompt support
+# Setup git prompt.
 prompt_git() {
     local s='';
     local branchName='';
 
-    # check if the current directory is in a git repository
+    # Check if the current directory is in a git repository.
     if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
 
-        # check if the current directory is in .git before running git checks
+        # Check if the current directory is in .git before running git checks.
         if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
 
-            # ensure index is up to date
+            # Ensure index is up to date.
             git update-index --really-refresh -q &>/dev/null;
 
-            # check index for uncommitted changes
+            # Check index for uncommitted changes.
             if ! $(git diff --quiet --ignore-submodules --cached); then
                 s+='+';
             fi;
 
-            # check for unstaged changes
+            # Check for unstaged changes.
             if ! $(git diff-files --quiet --ignore-submodules --); then
                 s+='!';
             fi;
 
-            # check for untracked files
+            # Check for untracked files.
             if [ -n "$(git ls-files --others --exclude-standard)" ]; then
                 s+='?';
             fi;
 
-            # check for stashed files
+            # Check for stashed files.
             if $(git rev-parse --verify refs/stash &>/dev/null); then
                 s+='$';
             fi;
 
         fi;
 
-        # use short symbolic ref as as branch name, if HEAD isn't a symbolic ref,
-        # use shortened SHA for latest commit, otherwise give up
+        # Use short symbolic ref as branch name, if HEAD isn't a symbolic ref,
+        # use shortened SHA for latest commit, otherwise give up.
         branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
             git rev-parse --short HEAD 2> /dev/null || \
             echo '(unknown)')";
@@ -48,16 +48,16 @@ prompt_git() {
     fi;
 }
 
-# display 256 colors
+# Display 256 colors.
 if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
     export TERM='gnome-256color';
 elif infocmp xterm-256color >/dev/null 2>&1; then
     export TERM='xterm-256color';
 fi;
 
-# set colors
+# Set colors.
 if tput setaf 1 &> /dev/null; then
-    tput sgr0; # reset
+    tput sgr0; # Reset
     bold=$(tput bold);
     reset=$(tput sgr0);
     black=$(tput setaf 0);
@@ -85,40 +85,40 @@ else
     yellow="\e[1;33m";
 fi;
 
-# highlight user when logged in as root
+# Highlight user when logged in as root.
 if [[ "${USER}" == "root" ]]; then
     userStyle="${red}";
 else
     userStyle="${orange}";
 fi;
 
-# hightlight host when connected via SSH
+# Hightlight host when connected via SSH.
 if [[ "${SSH_TTY}" ]]; then
     hostStyle="${bold}${red}";
 else
     hostStyle="${yellow}";
 fi;
 
-# set title and prompt
-PS1="\[\033]0;\W\007\]"; # working directory base name
-PS1+="\[${bold}\]\n"; # line break
-PS1+="\[${userStyle}\]\u"; # user
+# Set title and prompt.
+PS1="\[\033]0;\W\007\]"; # Working directory base name
+PS1+="\[${bold}\]\n"; # Line break
+PS1+="\[${userStyle}\]\u"; # User
 PS1+="\[${white}\] at ";
-PS1+="\[${hostStyle}\]\h"; # host
+PS1+="\[${hostStyle}\]\h"; # Host
 PS1+="\[${white}\] in ";
-PS1+="\[${green}\]\w"; # working directory full path
-PS1+="\$(prompt_git \"\[${white}\] on \[${violet}\]\" \"\[${blue}\]\")"; # git details
+PS1+="\[${green}\]\w"; # Working directory full path
+PS1+="\$(prompt_git \"\[${white}\] on \[${violet}\]\" \"\[${blue}\]\")"; # Git details
 PS1+="\n";
 PS1+="\[${white}\]\$ \[${reset}\]"; # '$' (and reset color)
 export PS1;
 
-# set Vim as the default editor
+# Set Vim as the default editor.
 export EDITOR="vim"
 
-# set Go workspace
-export GOPATH=~/Git/Go
+# Set Go workspace.
+export GOPATH=$HOME/Git/Go
 
-# modify default ls behavior
+# Modify default ls behavior.
 platform=$(uname)
 if [[ "$platform" == 'Linux' ]]; then
     alias ls="ls -lF --color=auto"
@@ -127,7 +127,7 @@ elif [[ "$platform" == 'Darwin' ]]; then
 fi
 unset platform
 
-# extract most known archives with one command
+# Extract most known archives with one command.
 extract () {
     if [ -f $1 ] ; then
         case $1 in
