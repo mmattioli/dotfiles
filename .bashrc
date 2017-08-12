@@ -115,8 +115,14 @@ export PS1;
 # Set Vim as the default editor.
 export EDITOR="vim"
 
-# Set Go workspace.
-export GOPATH=$HOME/Git/Go
+# Setup general development workspace.
+export DEVWORKSPACE="$HOME/Developer"
+mkdir -p $DEVWORKSPACE
+
+# Setup Go workspace.
+export GOPATH=$DEVWORKSPACE/go
+mkdir -p $GOPATH $GOPATH/bin $GOPATH/src/github.com/mmattioli $GOPATH/pkg
+export PATH=$PATH:$GOPATH/bin
 
 # Modify default ls behavior.
 platform=$(uname)
