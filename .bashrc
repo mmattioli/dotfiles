@@ -113,7 +113,7 @@ PS1+="\[${white}\]\$ \[${reset}\]"; # '$' (and reset color)
 export PS1;
 
 # Set Vim as the default editor.
-export EDITOR="vim"
+export EDITOR="atom --wait"
 
 # Setup general development workspace.
 export DEVWORKSPACE="$HOME/Developer"
