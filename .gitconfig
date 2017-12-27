@@ -1,3 +1,5 @@
 [user]
     name = Michael Mattioli
     email = mmattioli@users.noreply.github.com
+[core]
+	editor = atom --wait
