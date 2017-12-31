@@ -49,24 +49,22 @@ prompt_git() {
 }
 
 # Set colors.
-if tput setaf 1 &> /dev/null; then
-    base03=$(tput setaf 234)
-    base02=$(tput setaf 235)
-    base01=$(tput setaf 240)
-    base00=$(tput setaf 241)
-    base0=$(tput setaf 244)
-    base1=$(tput setaf 245)
-    base2=$(tput setaf 254)
-    base3=$(tput setaf 230)
-    yellow=$(tput setaf 136)
-    orange=$(tput setaf 166)
-    red=$(tput setaf 160)
-    magenta=$(tput setaf 125)
-    violet=$(tput setaf 61)
-    blue=$(tput setaf 33)
-    cyan=$(tput setaf 37)
-    green=$(tput setaf 64)
-fi;
+base03=$(tput setaf 234)
+base02=$(tput setaf 235)
+base01=$(tput setaf 240)
+base00=$(tput setaf 241)
+base0=$(tput setaf 244)
+base1=$(tput setaf 245)
+base2=$(tput setaf 254)
+base3=$(tput setaf 230)
+yellow=$(tput setaf 136)
+orange=$(tput setaf 166)
+red=$(tput setaf 160)
+magenta=$(tput setaf 125)
+violet=$(tput setaf 61)
+blue=$(tput setaf 33)
+cyan=$(tput setaf 37)
+green=$(tput setaf 64)
 
 # Set title and prompt.
 PS1="\[$(tput bold)\]";
