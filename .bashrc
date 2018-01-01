@@ -51,7 +51,7 @@ prompt_git() {
 # Setup PS1 prompt.
 prompt_ps1() {
 
-    # Set colors.
+    # Solarized colors.
     local base03=$(tput setaf 234)
     local base02=$(tput setaf 235)
     local base01=$(tput setaf 240)
@@ -69,16 +69,19 @@ prompt_ps1() {
     local cyan=$(tput setaf 37)
     local green=$(tput setaf 64)
 
+    local bold=$(tput bold)
+    local reset=$(tput sgr0)
+
     # Construct prompt.
-    PS1="\[$(tput bold)\]";
-    PS1+="\[${orange}\]\u"; # User
+    PS1="\[${bold}\]";
+    PS1+="\[${orange}\]\u";
     PS1+="\[${base2}\] at ";
-    PS1+="\[${yellow}\]\h"; # Host
+    PS1+="\[${yellow}\]\h";
     PS1+="\[${base2}\] in ";
-    PS1+="\[${green}\]\w"; # Working directory full path.
+    PS1+="\[${green}\]\w";
     PS1+="\$(prompt_git \"\[${base2}\] on \[${violet}\]\" \"\[${blue}\]\")"; # Git details.
     PS1+="\n";
-    PS1+="\[${base2}\]\$ \[$(tput sgr0)\]"; # Show '$' and reset colors.
+    PS1+="\[${base2}\]\$ \[${reset}\]";
 
     export PS1;
 
