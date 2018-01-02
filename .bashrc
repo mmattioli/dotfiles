@@ -103,8 +103,11 @@ export PATH=$PATH:$GOPATH/bin
 # Modify default ls behavior.
 platform=$(uname)
 if [[ "$platform" == 'Linux' ]]; then
-    alias ls="ls -lFp --color=auto"
+    alias ls="ls -lhpF --color=auto"
 elif [[ "$platform" == 'Darwin' ]]; then
-    alias ls="ls -lFGp"
+    alias ls="ls -lhpFG"
 fi
 unset platform
+
+# Modify default grep behavior.
+alias grep="grep --color=auto"
