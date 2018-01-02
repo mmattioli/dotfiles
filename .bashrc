@@ -83,10 +83,10 @@ prompt_ps1() {
     PS1+="\n";
     PS1+="\[${base2}\]\$ \[${reset}\]";
 
-    export PS1;
+    echo -e $PS1;
 
 }
-prompt_ps1
+export PS1=$(prompt_ps1)
 
 # Set Atom as the default editor.
 export EDITOR="atom --wait"
