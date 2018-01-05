@@ -6,8 +6,6 @@ set number
 
 " Set the color scheme and background.
 set background=dark
-let g:solarized_termtrans=1
-let g:solarized_termcolors=256
 colorscheme solarized
 
 " Each tab should 4 columns wide using spaces.
