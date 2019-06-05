@@ -88,9 +88,6 @@ prompt_ps1() {
 }
 export PS1=$(prompt_ps1)
 
-# Set Atom as the default editor.
-export EDITOR="atom --wait"
-
 # Setup general development workspace.
 export DEVWORKSPACE="$HOME/Developer"
 mkdir -p $DEVWORKSPACE
