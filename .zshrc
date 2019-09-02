@@ -53,37 +53,16 @@ prompt_git() {
 # Setup PS1 prompt.
 prompt_ps1() {
 
-    # Solarized colors.
-    local base03=$(tput setaf 234)
-    local base02=$(tput setaf 235)
-    local base01=$(tput setaf 240)
-    local base00=$(tput setaf 241)
-    local base0=$(tput setaf 244)
-    local base1=$(tput setaf 245)
-    local base2=$(tput setaf 254)
-    local base3=$(tput setaf 230)
-    local yellow=$(tput setaf 136)
-    local orange=$(tput setaf 166)
-    local red=$(tput setaf 160)
-    local magenta=$(tput setaf 125)
-    local violet=$(tput setaf 61)
-    local blue=$(tput setaf 33)
-    local cyan=$(tput setaf 37)
-    local green=$(tput setaf 64)
-
-    local bold=$(tput bold)
-    local reset=$(tput sgr0)
-
     # Construct prompt.
-    PS1="${bold}";
-    PS1+="${orange}%n";
-    PS1+="${base2} at ";
-    PS1+="${yellow}%m";
-    PS1+="${base2} in ";
-    PS1+="${green}%~";
-    PS1+="\$(prompt_git \"${base2} on ${violet}\" \"${blue}\")"; # Git details.
+    PS1="%B";
+    PS1+="%F{cyan}%n%f"; # Username.
+    PS1+="%F{white} at %f";
+    PS1+="%F{yellow}%m%f";  # Hostname up to the first '.'.
+    PS1+="%F{white} in %f";
+    PS1+="%F{green}%~%f"; # Current directory relative to $HOME.
+    PS1+="\$(prompt_git \"%F{white} on %f%F{magenta}\" \"%f\")"; # Git details.
     PS1+="\n";
-    PS1+="${base2}\$ ${reset}";
+    PS1+="%F{white}$ %f%b"; # Reset.
 
     echo -e $PS1;
 
