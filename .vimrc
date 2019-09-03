@@ -4,9 +4,9 @@ syntax on
 " Show line numbers.
 set number
 
-" Set the color scheme and background.
-set background=dark
-colorscheme solarized
+" Set the color scheme.
+let g:dracula_italic=0
+colorscheme dracula
 
 " Each tab should 4 columns wide using spaces.
 set tabstop=4
