@@ -94,8 +94,7 @@ mkdir -p $DEVWORKSPACE
 
 # Setup Go workspace.
 export GOPATH=$DEVWORKSPACE/go
-mkdir -p $GOPATH $GOPATH/bin $GOPATH/src/github.com/mmattioli $GOPATH/pkg
-export PATH=$PATH:$GOPATH/bin
+mkdir -p $GOPATH $GOPATH/bin $GOPATH/src $GOPATH/pkg
 
 # Modify default ls behavior.
 platform=$(uname)
